@@ -1,0 +1,12 @@
+body {
+  background-color: #ddd;
+}
+
+#contentWrapper {
+  margin-top: 10px;
+}
+
+input[type=checkbox] {
+  transform: scale(5);
+  margin: 50px;
+}

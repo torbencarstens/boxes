@@ -1,0 +1,37 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.ingress.name }}
+  namespace: {{ default .Release.Namespace .Values.namespace.name }}
+  annotations:
+    {{- if not .Values.ingress.disableDefaultAnnotations }}
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/issue-temporary-certificate: "false"
+      cert-manager.io/cluster-issuer: {{ default "letsencrypt-issuer" .Values.ingress.issuer }}
+    {{- end }}
+    {{- if .Values.ingress.customAnnotations }}
+    {{ .Values.ingress.customAnnotations | toYaml | nindent 6 }}
+    {{- end }}
+spec:
+  tls:
+    - secretName: {{ .Values.ingress.secret }}
+      hosts:
+      {{- range $host := .Values.ingress.hosts }}
+      - {{ $host.name }}
+      {{- end }}
+  rules:
+  {{- range $host := .Values.ingress.hosts }}
+  {{ with $host }}
+  - host: {{ .name }}
+    http:
+      paths:
+      - path: {{ default "/" .path }}
+        pathType: {{ default "Prefix" .prefix }}
+        backend:
+          service:
+            name: {{ $.Values.service.name }}
+            port:
+              number: {{ $.Values.service.port }}
+  {{- end }}
+  {{- end }}
