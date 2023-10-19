@@ -55,7 +55,7 @@ function allIdsChecked(ids) {
 function checkRow(rowIndex, columnCount) {
   let ids = [];
   for (let i = 0; i < columnCount; i++) {
-    ids.push(buildId(rowIndex, columnIndex));
+    ids.push(buildId(rowIndex, i));
   }
 
   return allIdsChecked(ids);
@@ -64,14 +64,14 @@ function checkRow(rowIndex, columnCount) {
 function checkColumn(columnIndex, rowCount) {
   let ids = [];
   for (let i = 0; i < rowCount; i++) {
-    ids.push(buildId(rowIndex, columnIndex));
+    ids.push(buildId(i, columnIndex));
   }
 
   return allIdsChecked(ids);
 }
 
 function markCheckbox(rowIndex, columnIndex, color) {
-  let id = buildId(rowIndex, columnIndex);;
+  let id = buildId(rowIndex, columnIndex);
   document.getElementById(id).style.accentColor = color;
 }
 
