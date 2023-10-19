@@ -1,18 +1,36 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf8" />
-    <link rel="stylesheet" href="./main.css" />
-    <link rel="icon" type="image/png" href="data:image/png;base64," />
+  <meta charset="utf8" />
+  <link rel="stylesheet" href="./main.css" />
+  <link rel="icon" type="image/png" href="data:image/png;base64," />
 
-    <title>boxes</title>
+  <title>boxes</title>
 </head>
-<body>
-<input type="number" id="rowCount" min="1" onChange="updateTable()" value="6" />
-<input type="number" id="columnCount" min="1" onChange="updateTable()" value="6" />
 
-<div id="contentWrapper">
-</div>
-<script src="./boxes.js" type="application/javascript"></script>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th>Rows (1-99)</th>
+        <th>Columns (1-99)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="number" id="rowCount" min="1" max="99" onChange="updateTable()" value="6" /></td>
+        <td><input type="number" id="columnCount" min="1" max="99" onChange="updateTable()" value="6" /></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <td colspan="2">page will be slow/unresponsive on large row/column count</td>
+    </tfoot>
+  </table>
+
+  <div id="contentWrapper">
+  </div>
+  <script src="./boxes.js" type="application/javascript"></script>
 </body>
+
 </html>
