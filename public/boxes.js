@@ -42,26 +42,31 @@ function generateTable(rowCount, columnCount) {
   return s + "</table>";
 }
 
+function allIdsChecked(ids) {
+    return ids.every(isIdChecked);
+}
+
 function checkRow(rowIndex, columnCount) {
+    let ids = [];
     for(let i = 0; i < columnCount; i++) {
-        let id = `${rowIndex}${i}`;
-        if (!isIdChecked(id)) {
-            return false
-        }
+        ids.push(`${rowIndex}${i}`);
     }
 
-    return true;
+    return allIdsChecked(ids);
 }
 
 function checkColumn(columnIndex, rowCount) {
+    let ids = [];
     for(let i = 0; i < rowCount; i++) {
-        let id = `${i}${columnIndex}`;
-        if (!isIdChecked(id)) {
-            return false
-        }
+        ids.push(`${i}${columnIndex}`);
     }
 
-    return true;
+    return allIdsChecked(ids);
+}
+
+function markCheckbox(rowIndex, columnIndex, color) {
+    let id = `${rowIndex}${columnIndex}`;
+    document.getElementById(id).style.accentColor = color;
 }
 
 function markRow(rowIndex, columnCount, accentColor, markedColumns) {
@@ -70,21 +75,14 @@ function markRow(rowIndex, columnCount, accentColor, markedColumns) {
             continue
         }
 
-        let id = `${rowIndex}${i}`;
-        document.getElementById(id).style.accentColor = accentColor;
-        console.log(`${id}: ${accentColor}`)
+        markCheckbox(rowIndex, i, accentColor);
     }
-
-    return true;
 }
 
 function markColumn(columnIndex, rowCount, accentColor) {
     for(let i = 0; i < rowCount; i++) {
-        let id = `${i}${columnIndex}`;
-        document.getElementById(id).style.accentColor = accentColor;
+        markCheckbox(i, columnIndex, accentColor);
     }
-
-    return true;
 }
 
 function updateFullLine(rowCount, columnCount) {
