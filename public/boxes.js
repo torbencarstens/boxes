@@ -31,7 +31,7 @@ function check(row, column) {
 }
 
 function generateInput(name) {
-  let baseBox = `<input onChange="updateTable()" id="${name}" name="${name}" type="checkbox"`;
+  let baseBox = `<input onchange="updateTable()" id="${name}" name="${name}" type="checkbox"`;
 
   if (isIdChecked(name)) {
     baseBox += " checked";
