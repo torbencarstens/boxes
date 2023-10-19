@@ -1,5 +1,15 @@
 let contentWrapperElement = document.getElementById("contentWrapper");
 
+function getCountInput(id, count) {
+  if (count === undefined || count === null) {
+    count = document.getElementById(id).value;
+
+    count = Math.max(1, parseInt(count, 10));
+  }
+
+  return count;
+}
+
 function buildId(rowIndex, columnIndex) {
   return `r${rowIndex}c${columnIndex}`;
 }
@@ -12,6 +22,12 @@ function isIdChecked(id) {
   }
 
   return false;
+}
+
+function check(row, column) {
+  let id = buildId(row, column);
+
+  document.getElementById(id).checked = true;
 }
 
 function generateInput(name) {
@@ -132,19 +148,35 @@ function updateFullLine(rowCount, columnCount) {
 }
 
 function updateTable(rowCount, columnCount) {
-  if (rowCount === undefined) {
-    rowCount = document.getElementById("rowCount").value;
-
-    rowCount = Math.max(1, parseInt(rowCount, 10));
-  }
-  if (columnCount === undefined) {
-    columnCount = document.getElementById("columnCount").value;
-
-    columnCount = Math.max(1, parseInt(columnCount, 10));
-  }
+  rowCount = getCountInput("rowCount", rowCount);
+  columnCount = getCountInput("columnCount", columnCount);
 
   contentWrapperElement.innerHTML = generateTable(rowCount, columnCount);
   updateFullLine(rowCount, columnCount);
+}
+
+function roll() {
+  columnCount = getCountInput("columnCount", undefined);
+  rowCount = getCountInput("rowCount", undefined);
+  let column = -1;
+  let row = -1;
+  let tries = 0;
+  // hopefully *10 will be enough to select one if one is still open
+  // way more performant than actually checking this for our input parameters (1-99)
+  let maxTries = (columnCount * rowCount) * 10;
+  let found = false;
+
+  while (!found && tries < maxTries) {
+    tries += 1;
+    column = Math.floor((Math.random() * columnCount));
+    row = Math.floor((Math.random() * rowCount));
+
+    if (!isIdChecked(buildId(row, column))) {
+      check(row, column);
+      updateFullLine(rowCount, columnCount);
+      found = true;
+    }
+  }
 }
 
 updateTable();

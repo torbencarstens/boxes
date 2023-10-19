@@ -15,16 +15,18 @@
       <tr>
         <th>Rows (1-99)</th>
         <th>Columns (1-99)</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><input type="number" id="rowCount" min="1" max="99" onChange="updateTable()" value="6" /></td>
         <td><input type="number" id="columnCount" min="1" max="99" onChange="updateTable()" value="6" /></td>
+        <td><button id="roll" onclick="roll()">Roll</button></td>
       </tr>
     </tbody>
     <tfoot>
-      <td colspan="2">page will be slow/unresponsive on large row/column count</td>
+      <td colspan="3">page will be slow/unresponsive on large row/column count</td>
     </tfoot>
   </table>
 
