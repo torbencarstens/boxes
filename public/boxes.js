@@ -10,13 +10,35 @@ function getCountInput(id, count) {
   return count;
 }
 
+function fillRow(rowIndex, columnCount) {
+  columnCount = getCountInput("columnCount", columnCount);
+  let checkValue = !checkRow(rowIndex, columnCount);
+
+  for (let i = 0; i < columnCount; i++) {
+    check(rowIndex, i, checkValue);
+  }
+
+  updateFullLine(getCountInput("rowCount"), columnCount);
+}
+
+function fillColumn(columnIndex, rowCount) {
+  rowCount = getCountInput("rowCount", rowCount);
+  let checkValue = !checkColumn(columnIndex, rowCount);
+
+  for (let i = 0; i < rowCount; i++) {
+    check(i, columnIndex, checkValue);
+  }
+
+  updateFullLine(rowCount, getCountInput("columnCount"));
+}
+
 function fill() {
   let columnCount = getCountInput("columnCount", undefined);
   let rowCount = getCountInput("rowCount", undefined);
 
   for (let i = 0; i < rowCount; i++) {
     for (let j = 0; j < columnCount; j++) {
-      check(i, j);
+      check(i, j, true);
     }
   }
 
@@ -37,10 +59,10 @@ function isIdChecked(id) {
   return false;
 }
 
-function check(row, column) {
+function check(row, column, value) {
   let id = buildId(row, column);
 
-  document.getElementById(id).checked = true;
+  document.getElementById(id).checked = value;
 }
 
 function generateInput(name) {
@@ -56,7 +78,7 @@ function generateInput(name) {
 function generateHeaderRow(columnCount) {
   let s = "<tr><th></th>";
   for (let i = 0; i < columnCount; i++) {
-    s += `<th>${i + 1}</th>`
+    s += `<th><button onclick="fillColumn(${i})">${i + 1}</button></th>`
   }
 
   return s + "</tr>"
@@ -70,7 +92,7 @@ function generateColumn(rowIndex, columnIndex) {
 
 function generateRow(rowIndex, columnCount) {
   let s = "<tr>";
-  s += `<th>${rowIndex + 1}</th>`;
+  s += `<th><button onclick="fillRow(${rowIndex})">${rowIndex + 1}</button></th>`;
 
   for (let i = 0; i < columnCount; i++) {
     s += generateColumn(rowIndex, i);
@@ -185,7 +207,7 @@ function roll() {
     row = Math.floor((Math.random() * rowCount));
 
     if (!isIdChecked(buildId(row, column))) {
-      check(row, column);
+      check(row, column, true);
       updateFullLine(rowCount, columnCount);
       found = true;
     }
