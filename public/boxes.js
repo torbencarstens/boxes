@@ -24,6 +24,15 @@ function generateInput(name) {
   return baseBox + " />";
 }
 
+function generateHeaderRow(columnCount) {
+  let s = "<tr><th></th>";
+  for (let i = 0; i < columnCount; i++) {
+    s += `<th>${i + 1}</th>`
+  }
+
+  return s + "</tr>"
+}
+
 function generateColumn(rowIndex, columnIndex) {
   let name = buildId(rowIndex, columnIndex);
 
@@ -32,6 +41,8 @@ function generateColumn(rowIndex, columnIndex) {
 
 function generateRow(rowIndex, columnCount) {
   let s = "<tr>";
+  s += `<th>${rowIndex + 1}</th>`;
+
   for (let i = 0; i < columnCount; i++) {
     s += generateColumn(rowIndex, i);
   }
@@ -41,6 +52,8 @@ function generateRow(rowIndex, columnCount) {
 
 function generateTable(rowCount, columnCount) {
   let s = "<table>";
+  s += generateHeaderRow(columnCount);
+
   for (let i = 0; i < rowCount; i++) {
     s += generateRow(i, columnCount);
   }
