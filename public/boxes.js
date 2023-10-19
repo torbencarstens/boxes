@@ -10,6 +10,19 @@ function getCountInput(id, count) {
   return count;
 }
 
+function fill() {
+  let columnCount = getCountInput("columnCount", undefined);
+  let rowCount = getCountInput("rowCount", undefined);
+
+  for (let i = 0; i < rowCount; i++) {
+    for (let j = 0; j < columnCount; j++) {
+      check(i, j);
+    }
+  }
+
+  updateFullLine(rowCount, columnCount);
+}
+
 function buildId(rowIndex, columnIndex) {
   return `r${rowIndex}c${columnIndex}`;
 }
