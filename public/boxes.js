@@ -1,12 +1,20 @@
 let contentWrapperElement = document.getElementById("contentWrapper");
 
-function generateInput(name) {
-  let previous = document.getElementById(name);
+function isIdChecked(id) {
+    let element = document.getElementById(id);
 
-  if (previous !== null && previous.checked === true) {
-    return `<input id="${name}" name="${name}" type="checkbox" checked />`;
+    if (element !== null) {
+        return element.checked;
+    }
+
+    return false;
+}
+
+function generateInput(name) {
+  if (isIdChecked(name)) {
+    return `<input onChange="updateTable()" id="${name}" name="${name}" type="checkbox" checked />`;
   } else {
-    return `<input id="${name}" name="${name}" type="checkbox" />`;
+    return `<input onChange="updateTable()" id="${name}" name="${name}" type="checkbox" />`;
   }
 }
 
@@ -34,6 +42,78 @@ function generateTable(rowCount, columnCount) {
   return s + "</table>";
 }
 
+function checkRow(rowIndex, columnCount) {
+    for(let i = 0; i < columnCount; i++) {
+        let id = `${rowIndex}${i}`;
+        if (!isIdChecked(id)) {
+            return false
+        }
+    }
+
+    return true;
+}
+
+function checkColumn(columnIndex, rowCount) {
+    for(let i = 0; i < rowCount; i++) {
+        let id = `${i}${columnIndex}`;
+        if (!isIdChecked(id)) {
+            return false
+        }
+    }
+
+    return true;
+}
+
+function markRow(rowIndex, columnCount, accentColor, markedColumns) {
+    for(let i = 0; i < columnCount; i++) {
+        if (markedColumns.includes(i)) {
+            continue
+        }
+
+        let id = `${rowIndex}${i}`;
+        document.getElementById(id).style.accentColor = accentColor;
+        console.log(`${id}: ${accentColor}`)
+    }
+
+    return true;
+}
+
+function markColumn(columnIndex, rowCount, accentColor) {
+    for(let i = 0; i < rowCount; i++) {
+        let id = `${i}${columnIndex}`;
+        document.getElementById(id).style.accentColor = accentColor;
+    }
+
+    return true;
+}
+
+function updateFullLine(rowCount, columnCount) {
+    let color = null;
+
+    color = null;
+    let markedColumns = [];
+    for(let i = 0; i < columnCount; i++) {
+        if(checkColumn(i, rowCount)) {
+            color = "#00ff00";
+            markedColumns.push(i);
+        } else {
+            color = null;
+        }
+
+        markColumn(i, rowCount, color);
+    }
+
+    for(let i = 0; i < rowCount; i++) {
+        if(checkRow(i, columnCount)) {
+            color = "#00ff00";
+        } else {
+            color = null;
+        }
+
+        markRow(i, columnCount, color, markedColumns);
+    }
+}
+
 function updateTable(rowCount, columnCount) {
   if (rowCount === undefined) {
     rowCount = document.getElementById("rowCount").value;
@@ -47,6 +127,7 @@ function updateTable(rowCount, columnCount) {
   }
   
   contentWrapperElement.innerHTML = generateTable(rowCount, columnCount);
+  updateFullLine(rowCount, columnCount);
 }
 
 updateTable();
