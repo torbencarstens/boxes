@@ -1,21 +1,23 @@
 let contentWrapperElement = document.getElementById("contentWrapper");
 
 function isIdChecked(id) {
-    let element = document.getElementById(id);
+  let element = document.getElementById(id);
 
-    if (element !== null) {
-        return element.checked;
-    }
+  if (element !== null) {
+    return element.checked;
+  }
 
-    return false;
+  return false;
 }
 
 function generateInput(name) {
+  let baseBox = `<input onChange="updateTable()" id="${name}" name="${name}" type="checkbox"`;
+
   if (isIdChecked(name)) {
-    return `<input onChange="updateTable()" id="${name}" name="${name}" type="checkbox" checked />`;
-  } else {
-    return `<input onChange="updateTable()" id="${name}" name="${name}" type="checkbox" />`;
+    baseBox += " checked";
   }
+
+  return baseBox + " />";
 }
 
 function generateColumn(rowIndex, columnIndex) {
@@ -26,90 +28,90 @@ function generateColumn(rowIndex, columnIndex) {
 
 function generateRow(rowIndex, columnCount) {
   let s = "<tr>";
-  for(let i = 0; i < columnCount; i++) {
+  for (let i = 0; i < columnCount; i++) {
     s += generateColumn(rowIndex, i);
   }
-  
+
   return s + "</tr>";
 }
 
 function generateTable(rowCount, columnCount) {
   let s = "<table>";
-  for(let i = 0; i < rowCount; i++) {
+  for (let i = 0; i < rowCount; i++) {
     s += generateRow(i, columnCount);
   }
-  
+
   return s + "</table>";
 }
 
 function allIdsChecked(ids) {
-    return ids.every(isIdChecked);
+  return ids.every(isIdChecked);
 }
 
 function checkRow(rowIndex, columnCount) {
-    let ids = [];
-    for(let i = 0; i < columnCount; i++) {
-        ids.push(`${rowIndex}${i}`);
-    }
+  let ids = [];
+  for (let i = 0; i < columnCount; i++) {
+    ids.push(`${rowIndex}${i}`);
+  }
 
-    return allIdsChecked(ids);
+  return allIdsChecked(ids);
 }
 
 function checkColumn(columnIndex, rowCount) {
-    let ids = [];
-    for(let i = 0; i < rowCount; i++) {
-        ids.push(`${i}${columnIndex}`);
-    }
+  let ids = [];
+  for (let i = 0; i < rowCount; i++) {
+    ids.push(`${i}${columnIndex}`);
+  }
 
-    return allIdsChecked(ids);
+  return allIdsChecked(ids);
 }
 
 function markCheckbox(rowIndex, columnIndex, color) {
-    let id = `${rowIndex}${columnIndex}`;
-    document.getElementById(id).style.accentColor = color;
+  let id = `${rowIndex}${columnIndex}`;
+  document.getElementById(id).style.accentColor = color;
 }
 
 function markRow(rowIndex, columnCount, accentColor, markedColumns) {
-    for(let i = 0; i < columnCount; i++) {
-        if (markedColumns.includes(i)) {
-            continue
-        }
-
-        markCheckbox(rowIndex, i, accentColor);
+  for (let i = 0; i < columnCount; i++) {
+    if (markedColumns.includes(i)) {
+      continue
     }
+
+    markCheckbox(rowIndex, i, accentColor);
+  }
 }
 
 function markColumn(columnIndex, rowCount, accentColor) {
-    for(let i = 0; i < rowCount; i++) {
-        markCheckbox(i, columnIndex, accentColor);
-    }
+  for (let i = 0; i < rowCount; i++) {
+    markCheckbox(i, columnIndex, accentColor);
+  }
 }
 
 function updateFullLine(rowCount, columnCount) {
-    let color = null;
+  let color = null;
 
-    color = null;
-    let markedColumns = [];
-    for(let i = 0; i < columnCount; i++) {
-        if(checkColumn(i, rowCount)) {
-            color = "#00ff00";
-            markedColumns.push(i);
-        } else {
-            color = null;
-        }
-
-        markColumn(i, rowCount, color);
+  color = null;
+  let markedColumns = [];
+  for (let i = 0; i < columnCount; i++) {
+    if (checkColumn(i, rowCount)) {
+      color = "#00ff00";
+      markedColumns.push(i);
+    } else {
+      color = null;
     }
 
-    for(let i = 0; i < rowCount; i++) {
-        if(checkRow(i, columnCount)) {
-            color = "#00ff00";
-        } else {
-            color = null;
-        }
+    markColumn(i, rowCount, color);
+  }
 
-        markRow(i, columnCount, color, markedColumns);
+  for (let i = 0; i < rowCount; i++) {
+    if (checkRow(i, columnCount)) {
+      color = "#00ff00";
+    } else {
+      color = null;
     }
+
+    markRow(i, columnCount, color, markedColumns);
+  }
 }
 
 function updateTable(rowCount, columnCount) {
@@ -123,7 +125,7 @@ function updateTable(rowCount, columnCount) {
 
     columnCount = Math.max(1, parseInt(columnCount, 10));
   }
-  
+
   contentWrapperElement.innerHTML = generateTable(rowCount, columnCount);
   updateFullLine(rowCount, columnCount);
 }
