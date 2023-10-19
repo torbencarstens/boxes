@@ -1,5 +1,9 @@
 let contentWrapperElement = document.getElementById("contentWrapper");
 
+function buildId(rowIndex, columnIndex) {
+  return `r${rowIndex}c${columnIndex}`;
+}
+
 function isIdChecked(id) {
   let element = document.getElementById(id);
 
@@ -21,7 +25,7 @@ function generateInput(name) {
 }
 
 function generateColumn(rowIndex, columnIndex) {
-  let name = `${rowIndex}${columnIndex}`;
+  let name = buildId(rowIndex, columnIndex);
 
   return `<td>${generateInput(name)}</td>`;
 }
@@ -51,7 +55,7 @@ function allIdsChecked(ids) {
 function checkRow(rowIndex, columnCount) {
   let ids = [];
   for (let i = 0; i < columnCount; i++) {
-    ids.push(`${rowIndex}${i}`);
+    ids.push(buildId(rowIndex, columnIndex));
   }
 
   return allIdsChecked(ids);
@@ -60,14 +64,14 @@ function checkRow(rowIndex, columnCount) {
 function checkColumn(columnIndex, rowCount) {
   let ids = [];
   for (let i = 0; i < rowCount; i++) {
-    ids.push(`${i}${columnIndex}`);
+    ids.push(buildId(rowIndex, columnIndex));
   }
 
   return allIdsChecked(ids);
 }
 
 function markCheckbox(rowIndex, columnIndex, color) {
-  let id = `${rowIndex}${columnIndex}`;
+  let id = buildId(rowIndex, columnIndex);;
   document.getElementById(id).style.accentColor = color;
 }
 
